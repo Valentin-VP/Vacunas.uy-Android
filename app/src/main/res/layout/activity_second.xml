@@ -7,13 +7,27 @@
     tools:context=".SecondActivity">
 
     <TextView
-        android:id="@+id/textView"
-        android:layout_width="166dp"
-        android:layout_height="84dp"
-        android:text="Entro"
+        android:id="@+id/cedula"
+        android:layout_width="253dp"
+        android:layout_height="176dp"
+        android:gravity="center"
+        android:textSize="50sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.481" />
+
+    <TextView
+        android:id="@+id/cedula2"
+        android:layout_width="255dp"
+        android:layout_height="138dp"
+        android:gravity="center"
+        android:text="Bienvenido"
+        android:textSize="50sp"
+        app:layout_constraintBottom_toTopOf="@+id/cedula"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
 </androidx.constraintlayout.widget.ConstraintLayout>
