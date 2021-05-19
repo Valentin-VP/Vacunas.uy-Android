@@ -33,6 +33,7 @@ import java.util.Objects;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.Cookie;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 
@@ -40,7 +41,7 @@ import okhttp3.Request;
 public class SecondActivity extends AppCompatActivity {
     //esta clase se va a crearse cuando se llegue a un http://localhost
 
-    private String token;
+    private String cookie;
     private TextView cedula;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,10 +75,9 @@ public class SecondActivity extends AppCompatActivity {
 
                 @Override
                 public void onResponse(@NotNull Call call, @NotNull okhttp3.Response response) throws IOException { //si obtengo respuesta
-                    final String myResponse = response.header("x-access-token");
-                    System.out.println(myResponse);
-                    token = myResponse;
-                    getCi();
+                    cookie = response.header("Set-Cookie");
+                    System.out.println(cookie);
+                    getNombre();
                 }
             });
 
@@ -96,12 +96,12 @@ public class SecondActivity extends AppCompatActivity {
         }
     }
 
-    public void getCi(){
+    public void getNombre(){
         String url = "http://10.0.2.2:8080/grupo15-services/rest/mobile/id";
         OkHttpClient client = new OkHttpClient();
         //defino el request
         Request request = new Request.Builder()
-                .addHeader("x-access-token", token)
+                .addHeader("Cookie", cookie)
                 .url(url)
                 .build();
 

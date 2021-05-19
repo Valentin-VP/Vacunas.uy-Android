@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/fondo"
     tools:context=".MainActivity">
 
     <Button
@@ -11,6 +12,8 @@
         android:layout_width="146dp"
         android:layout_height="77dp"
         android:text="Login"
+        android:textSize="30sp"
+        android:backgroundTint="#189fed"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"

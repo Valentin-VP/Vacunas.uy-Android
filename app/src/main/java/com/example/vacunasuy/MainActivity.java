@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v){
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://10.0.2.2:8080/grupo15-services/login"));
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://10.0.2.2:8080/grupo15-services/login?tipoUsuario=ciudadano"));
                 startActivity(browserIntent);
                 System.out.println("funciona");
             }
