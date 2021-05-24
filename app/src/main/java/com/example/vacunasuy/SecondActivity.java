@@ -1,13 +1,17 @@
 package com.example.vacunasuy;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.view.menu.MenuView;
+import androidx.cardview.widget.CardView;
 
 
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.android.volley.NetworkResponse;
@@ -42,13 +46,18 @@ public class SecondActivity extends AppCompatActivity {
     //esta clase se va a crearse cuando se llegue a un http://localhost
 
     private String cookie;
-    private TextView cedula;
+    private TextView nombre;
+    private CardView certificado;
+    private CardView vacunatorio;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_second);
 
-        cedula = (TextView) findViewById(R.id.cedula);
+        nombre = (TextView) findViewById(R.id.nombre);
+        certificado = findViewById(R.id.certificado);
+        vacunatorio = findViewById(R.id.vacunatorio);
 
         Uri URIdata = getIntent().getData();
         if (URIdata != null) {
@@ -80,13 +89,21 @@ public class SecondActivity extends AppCompatActivity {
                     getNombre();
                 }
             });
+        //onClick del certificado
+        certificado.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getApplicationContext(),"clicked certificado",Toast.LENGTH_SHORT).show();
+            }
+        });
 
-
-//        Intent intent = new Intent(this, MainActivity.class);
-//        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//        startActivity(intent);
-
-//        finish();
+        //onclick del vacunatorio
+        vacunatorio.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getApplicationContext(),"click vacunatorio",Toast.LENGTH_SHORT).show();
+            }
+        });
 
         }else {//si no obtengo el url capturado termino la actividad y vuevlo al main
             Intent intent = new Intent(this, MainActivity.class);
@@ -115,9 +132,9 @@ public class SecondActivity extends AppCompatActivity {
             @Override
             public void onResponse(@NotNull Call call, @NotNull okhttp3.Response response) throws IOException { //si obtengo respuesta
                 if(response.body() != null) {
-                    String ci = Objects.requireNonNull(response.body()).string();
-                    System.out.println(ci);
-                    cedula.setText(ci);
+                    String name = Objects.requireNonNull(response.body()).string();
+                    System.out.println(name);
+                    nombre.setText(name);
                 }else{
                     System.out.println("Response.body es null");
                     //manejar que no existe el usuario
