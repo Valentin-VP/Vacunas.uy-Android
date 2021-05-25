@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
+import android.webkit.ServiceWorkerController;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -62,7 +63,6 @@ public class SecondActivity extends AppCompatActivity {
         Uri URIdata = getIntent().getData();
         if (URIdata != null) {
 
-
             String uriString = URIdata.toString();
             String url = uriString.replaceAll("localhost/", "10.0.2.2:8080/grupo15-services/callback"); //cambio el link para que se direccione a donde quiero
 
@@ -85,8 +85,12 @@ public class SecondActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(@NotNull Call call, @NotNull okhttp3.Response response) throws IOException { //si obtengo respuesta
                     cookie = response.header("Set-Cookie");
-                    System.out.println(cookie);
-                    getNombre();
+                    if(cookie.contains("x-access-token")) {//si el usuario esta registrado en la bd nos retorna un x-access-token
+                        getNombre();
+                    }else{ //si el usuario no esta registrado en la bd no retorna el x-access-token y lo mando a registrarse
+                        Intent registro = new Intent(SecondActivity.this, Register.class);
+                        startActivity(registro);
+                    }
                 }
             });
         //onClick del certificado
@@ -131,14 +135,9 @@ public class SecondActivity extends AppCompatActivity {
 
             @Override
             public void onResponse(@NotNull Call call, @NotNull okhttp3.Response response) throws IOException { //si obtengo respuesta
-                if(response.body() != null) {
                     String name = Objects.requireNonNull(response.body()).string();
                     System.out.println(name);
                     nombre.setText(name);
-                }else{
-                    System.out.println("Response.body es null");
-                    //manejar que no existe el usuario
-                }
             }
         });
     }

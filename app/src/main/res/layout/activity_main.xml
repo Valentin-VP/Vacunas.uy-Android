@@ -4,21 +4,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background"
     tools:context=".MainActivity">
-    <!--android:background="@drawable/fondo"-->
+
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/login"
         android:layout_width="146dp"
         android:layout_height="77dp"
+        android:backgroundTint="#008AF4"
+        android:fontFamily="sans-serif"
         android:text="Login"
         android:textSize="30sp"
-        android:backgroundTint="#189fed"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.499" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

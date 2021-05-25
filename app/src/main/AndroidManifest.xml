@@ -12,7 +12,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.VacunasUy"
-        android:usesCleartextTraffic="true"> <!-- esta linea tambien es necesaria rest -->
+        android:usesCleartextTraffic="true">
+        <activity android:name=".Register"></activity>
+        <!-- esta linea tambien es necesaria rest -->
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,14 +22,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SecondActivity"
+        <activity
+            android:name=".SecondActivity"
+            android:exported="true"
             android:launchMode="singleTop"
             android:noHistory="true"
-            android:screenOrientation="behind"
-            android:exported="true" >
+            android:screenOrientation="behind">
             <intent-filter>
-                <data android:scheme="http" android:host="localhost" />
+                <data
+                    android:host="localhost"
+                    android:scheme="http" />
+
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
             </intent-filter>
