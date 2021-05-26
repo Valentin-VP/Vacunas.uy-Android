@@ -12,8 +12,23 @@ import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import org.jetbrains.annotations.NotNull;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.Calendar;
+import java.util.Objects;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
 
 public class Register extends AppCompatActivity implements DatePickerDialog.OnDateSetListener{
 
@@ -51,12 +66,66 @@ public class Register extends AppCompatActivity implements DatePickerDialog.OnDa
         registrarse.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                Intent registro = new Intent(Register.this, SecondActivity.class);
-                startActivity(registro);
+                TextView cedula = (TextView) findViewById(R.id.cedula);
+                TextView nombre = (TextView) findViewById(R.id.nombre);
+                TextView apellido = (TextView) findViewById(R.id.apellido);
+                TextView direccion = (TextView) findViewById(R.id.direccion);
+                TextView email = (TextView) findViewById(R.id.email);
+                TextView barrio = (TextView) findViewById(R.id.barrio);
+                TextView departamento = (TextView) findViewById(R.id.departamento);
+                if(cedula.getText().toString().isEmpty() || nombre.getText().toString().isEmpty() || apellido.getText().toString().isEmpty() ||
+                    direccion.getText().toString().isEmpty() || email.getText().toString().isEmpty() || barrio.getText().toString().isEmpty() ||
+                    departamento.getText().toString().isEmpty() || dateText.getText().toString().isEmpty()){
+                    Toast.makeText(getApplicationContext(), "Complete todos los campo", Toast.LENGTH_SHORT).show();
+                }else {
+                    //creo el JSONobject con los datos que quiero
+                    JSONObject registerJson = new JSONObject();
+                    try {
+                        registerJson.put("id", cedula.getText().toString());
+                        registerJson.put("nombre", nombre.getText().toString());
+                        registerJson.put("apellido", apellido.getText().toString());
+                        registerJson.put("fechaNac", dateText.getText().toString());
+                        registerJson.put("sexo", spinner.getSelectedItem().toString());
+                        registerJson.put("email", email.getText().toString());
+                        registerJson.put("direccion", direccion.getText().toString());
+                        registerJson.put("departamento", departamento.getText().toString());
+                        registerJson.put("barrio", barrio.getText().toString());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    String url = "http://10.0.2.2:8080/grupo15-services/rest/registro/ciudadano";
+                    final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+                    //creo el httprequest
+                    OkHttpClient client = new OkHttpClient();
+                    RequestBody registerBody = RequestBody.create(registerJson.toString(), MediaType.parse("application/json"));
+
+                    //defino el Request
+                    Request request = new Request.Builder()
+                            .url(url)
+                            .post(registerBody)
+                            .build();
+                    //hago el request
+                    client.newCall(request).enqueue(new Callback() {
+                        @Override
+                        public void onFailure(@NotNull Call call, @NotNull IOException e) { //si falla
+                            Toast.makeText(getApplicationContext(), "Error en el registro, intente nuevamente", Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void onResponse(@NotNull Call call, @NotNull okhttp3.Response response) throws IOException { //si obtengo respuesta
+                            System.out.println(response.toString());
+                        }
+                    });
+                    Intent registro = new Intent(Register.this, SecondActivity.class);
+                    startActivity(registro);
+                    finish();
+                }
             }
         });
     }
 
+    //estas 2 funciones son para que salga el datepicker
     public void showDatePickerDialog(){
         DatePickerDialog datePickerDialog = new DatePickerDialog(
                 this,
@@ -69,7 +138,22 @@ public class Register extends AppCompatActivity implements DatePickerDialog.OnDa
 
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-        String date =  dayOfMonth + "/" +month + "/" + year;
+        String date = null;
+        if(month>10 && dayOfMonth>10) {
+            date = year + "-" + month + "-" + dayOfMonth;
+        }else{
+            if(month<10 && dayOfMonth<10) {
+                date = year + "-0" + month + "-0" + dayOfMonth;
+            }else{
+                if (dayOfMonth < 10) {
+                    date = year + "-" + month + "-0" + dayOfMonth;
+                }
+                if (month < 10) {
+                    date = year + "-0" + month + "-" + dayOfMonth;
+                }
+
+            }
+        }
         this.dateText.setText(date);
     }
 }
