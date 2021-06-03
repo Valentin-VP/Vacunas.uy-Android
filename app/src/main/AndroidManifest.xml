@@ -4,8 +4,11 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
+        android:name=".CookieClass"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -13,8 +16,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.VacunasUy"
         android:usesCleartextTraffic="true">
-        <activity android:name=".Register"></activity>
-        <!-- esta linea tambien es necesaria rest -->
+        <activity android:name=".VacunatoriosActivity"></activity>
+        <activity android:name=".SecondActivity" />
+        <activity android:name=".ConstanciaActivity" />
+        <activity android:name=".CertificadoActivity" />
+        <activity android:name=".Register" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,7 +29,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SecondActivity"
+            android:name=".ComeBackActivity"
             android:exported="true"
             android:launchMode="singleTop"
             android:noHistory="true"

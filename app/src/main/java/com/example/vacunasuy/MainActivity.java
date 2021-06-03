@@ -21,18 +21,26 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button loginButton = findViewById(R.id.login);
+            Button loginButton = findViewById(R.id.login);
 
 
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v){
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://10.0.2.2:8080/grupo15-services/login?tipoUsuario=ciudadano"));
-                startActivity(browserIntent);
-                finish();
-                System.out.println("funciona");
-            }
-        });
+            loginButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    String cookie = ((CookieClass) MainActivity.this.getApplication()).getCookie();
+                    if(cookie == null){
+                         Intent browserIntent= new Intent(Intent.ACTION_VIEW, Uri.parse("http://10.0.2.2:8080/grupo15-services/login?tipoUsuario=ciudadano"));
+                        startActivity(browserIntent);
+                        finish();
+                        System.out.println("funciona");
+                    }else{
+                        Intent menu = new Intent(MainActivity.this, SecondActivity.class);
+                        startActivity(menu);
+                        System.out.println("entro sin pasar por la cookie");
+                    }
+                }
+            });
     }
 
 }
