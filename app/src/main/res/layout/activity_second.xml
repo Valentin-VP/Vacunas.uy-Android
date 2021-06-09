@@ -24,7 +24,7 @@
             android:textSize="34sp"
             app:layout_constraintEnd_toStartOf="@+id/imageView"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+            app:layout_constraintTop_toBottomOf="@+id/navbar" />
 
         <TextView
             android:id="@+id/textView2"
@@ -44,22 +44,23 @@
             android:layout_marginEnd="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/textView2"
-            app:layout_constraintTop_toBottomOf="@+id/toolbar"
+            app:layout_constraintTop_toBottomOf="@+id/navbar"
             app:srcCompat="@drawable/vacunas" />
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
+            android:id="@+id/navbar"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="#00FFFFFF"
 
+            android:isScrollContainer="false"
             android:minHeight="?attr/actionBarSize"
             android:theme="?attr/actionBarTheme"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:navigationIcon="@drawable/menu">
+            app:navigationIcon="@drawable/logout_icon_151219">
 
             <TextView
                 android:id="@+id/nombre"

@@ -1,7 +1,5 @@
 package com.example.vacunasuy;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -12,13 +10,14 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
@@ -27,6 +26,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CertificadoActivity extends AppCompatActivity {
 
@@ -72,7 +73,14 @@ public class CertificadoActivity extends AppCompatActivity {
                         //Toast.makeText(VacunatoriosActivity.this,"Todavia no se asignaron los vacunatorios", Toast.LENGTH_SHORT).show();
                     }
                 }
-        );
+        ){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> header = new HashMap<>();
+                header.put("Cookie", cookie);
+                return header;
+            }
+        };
         rq.add(or);
     }
 

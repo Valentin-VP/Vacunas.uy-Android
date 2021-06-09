@@ -1,8 +1,5 @@
 package com.example.vacunasuy;
 
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Build;
@@ -14,17 +11,18 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.Calendar;
-import java.util.Objects;
 
 import okhttp3.Call;
 import okhttp3.Callback;
-import okhttp3.FormBody;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -117,8 +115,8 @@ public class Register extends AppCompatActivity implements DatePickerDialog.OnDa
                             System.out.println(response.toString());
                         }
                     });
-                    Intent registro = new Intent(Register.this, SecondActivity.class);
-                    startActivity(registro);
+                    Intent registrado = new Intent(Register.this, MainActivity.class);
+                    startActivity(registrado);
                     finish();
                 }
             }
@@ -139,6 +137,7 @@ public class Register extends AppCompatActivity implements DatePickerDialog.OnDa
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
         String date = null;
+        month = month + 1;
         if(month>10 && dayOfMonth>10) {
             date = year + "-" + month + "-" + dayOfMonth;
         }else{

@@ -1,10 +1,11 @@
 package com.example.vacunasuy;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -17,10 +18,15 @@ import okhttp3.Request;
 
 public class ComeBackActivity extends AppCompatActivity {
 
+    SharedPreferences sharedPref;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_come_back);
+
+        // get or create SharedPreferences
+        sharedPref = getSharedPreferences("myPref", MODE_PRIVATE);
 
         Uri URIdata = getIntent().getData();
         if(URIdata != null ) {
@@ -40,9 +46,7 @@ public class ComeBackActivity extends AppCompatActivity {
             client.newCall(request).enqueue(new Callback() {
                 @Override
                 public void onFailure(@NotNull Call call, @NotNull IOException e) { //si falla
-                    System.out.println("#########################################");
                     e.printStackTrace();
-                    System.out.println("#########################################");
                 }
 
                 @Override
@@ -52,11 +56,13 @@ public class ComeBackActivity extends AppCompatActivity {
                     if (cookie.contains("x-access-token")) {//si el usuario esta registrado en la bd nos retorna un x-access-token
                         System.out.println("#########################################");
                         System.out.println(cookie);
+                        // guardar cookie en SharedPreferences
+                        sharedPref.edit().putString("cookie", cookie).commit();
                         System.out.println("#########################################");
                         goMenu(cookie);
                         //getNombre();
                     } else { //si el usuario no esta registrado en la bd no retorna el x-access-token y lo mando a registrarse
-                        Intent main = new Intent(ComeBackActivity.this, MainActivity.class);
+                        Intent main = new Intent(ComeBackActivity.this, Register.class);
                         startActivity(main);
                     }
                 }
@@ -69,7 +75,6 @@ public class ComeBackActivity extends AppCompatActivity {
     }
 
     public void goMenu(String cookie){
-        ((CookieClass) ComeBackActivity.this.getApplication()).setCookie(cookie);
         Intent menu = new Intent(ComeBackActivity.this, SecondActivity.class);
         startActivity(menu);
     }

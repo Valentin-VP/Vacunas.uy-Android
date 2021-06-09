@@ -1,16 +1,19 @@
 package com.example.vacunasuy;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -30,7 +33,6 @@ import java.util.ArrayList;
 
 public class VacunatoriosActivity extends AppCompatActivity {
 
-    private String cookie;
     private ArrayList<JSONObject> vacunatorios = new ArrayList<JSONObject>();
     private Location gps;
     FusedLocationProviderClient fusedLocationClient;
@@ -41,8 +43,6 @@ public class VacunatoriosActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vacunatorios);
-
-        cookie = ((CookieClass) this.getApplication()).getCookie();
         vac1 = findViewById(R.id.vac1);
         vac2 = findViewById(R.id.vac2);
         vac3 = findViewById(R.id.vac3);
@@ -53,6 +53,7 @@ public class VacunatoriosActivity extends AppCompatActivity {
             //Cuando tenemos el permiso
             fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
             getLocation();
+            //onclick del primero
 
         }else{
             ActivityCompat.requestPermissions(VacunatoriosActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},44);
@@ -116,10 +117,61 @@ public class VacunatoriosActivity extends AppCompatActivity {
         try {
             vacunatorios = bubbleSort(vacunatorios);
             vac1.setText(vacunatorios.get(0).getString("nombre"));
+
+            //seteo el onclick listener de vac1
+            vac1.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+//                    Intent vacunatorios = new Intent(VacunatoriosActivity.this, VacunatoriosActivity.class);
+//                    startActivity(vacunatorios);
+                    Uri gmmIntentUri = null;
+                    try {
+                        gmmIntentUri = Uri.parse("google.navigation:q=" + vacunatorios.get(0).getString("latitud") + "," + vacunatorios.get(0).getString("longitud"));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                    mapIntent.setPackage("com.google.android.apps.maps");
+                    startActivity(mapIntent);
+//                    if (mapIntent.resolveActivity(getPackageManager()) != null) {
+//                        startActivity(mapIntent);
+//                    }
+                }
+            });
+            //seteo el onclick listener de vac2
             if(vacunatorios.size() >= 2) {
                 vac2.setText(vacunatorios.get(1).getString("nombre"));
+                vac2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Uri gmmIntentUri = null;
+                        try {
+                            gmmIntentUri = Uri.parse("google.navigation:q=" + vacunatorios.get(1).getString("latitud") + "," + vacunatorios.get(1).getString("longitud"));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                        mapIntent.setPackage("com.google.android.apps.maps");
+                        startActivity(mapIntent);
+                    }
+                });
+                //seteo el onclick listener de vac3
                 if(vacunatorios.size() >= 3){
                     vac3.setText(vacunatorios.get(2).getString("nombre"));
+                    vac3.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Uri gmmIntentUri = null;
+                            try {
+                                gmmIntentUri = Uri.parse("google.navigation:q=" + vacunatorios.get(2).getString("latitud") + "," + vacunatorios.get(2).getString("longitud"));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                            mapIntent.setPackage("com.google.android.apps.maps");
+                            startActivity(mapIntent);
+                        }
+                    });
                 }
             }
         } catch (JSONException e) {
