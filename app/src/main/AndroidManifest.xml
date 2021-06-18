@@ -36,8 +36,8 @@
             android:screenOrientation="behind">
             <intent-filter>
                 <data
-                    android:host="localhost"
-                    android:scheme="http" />
+                    android:host="grupo15-vacunasuy-testing.web.elasticloud.uy"
+                    android:scheme="https" />
 
                 <action android:name="android.intent.action.VIEW" />
 
@@ -61,13 +61,14 @@
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/white" />
 
-<!--        <service-->
-<!--            android:name=".MyFirebaseMessagingService"-->
-<!--            android:exported="false">-->
-<!--            <intent-filter>-->
-<!--                <action android:name="com.google.firebase.MESSAGING_EVENT" />-->
-<!--            </intent-filter>-->
-<!--        </service>-->
+        <service
+            android:name=".MyFirebaseMessagingService"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

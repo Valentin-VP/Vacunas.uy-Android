@@ -1,6 +1,7 @@
 package com.example.vacunasuy;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -33,14 +34,15 @@ public class CertificadoActivity extends AppCompatActivity {
 
     private String cookie;
     JSONArray constancias = new JSONArray();
+    SharedPreferences sharedPref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_certificado);
         //obtengo la cookie
-
-        cookie = getIntent().getStringExtra("cookie");
+        sharedPref = getSharedPreferences("myPref", MODE_PRIVATE);//obtengo el sharedPreference
+        cookie = sharedPref.getString("cookie", null);//obtengo la cookie, si no existe retorna null
         getCertificado();
 
     }
@@ -57,10 +59,10 @@ public class CertificadoActivity extends AppCompatActivity {
                             try {
                                 constancias = response.getJSONArray("constancias");
                                 for (int i=0; i<constancias.length(); i++){
-                                    System.out.println(constancias.getJSONObject(i).getString("nombre"));
+                                    System.out.println(constancias.getJSONObject(i).getString("enfermedad"));
                                 }
                                 System.out.println();
-                                //continuarFlujo();
+                                continuarFlujo();
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -90,7 +92,7 @@ public class CertificadoActivity extends AppCompatActivity {
 
         ArrayList<String> constanciasAux = new ArrayList<String>();
         for(int i=0; i< constancias.length(); i++){
-            constanciasAux.add(constancias.getJSONObject(i).getString("nombre"));
+            constanciasAux.add(constancias.getJSONObject(i).getString("enfermedad"));
         }
         ArrayAdapter<String> adaptador = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, constanciasAux){
             //sobreescribo esto para poder cambiarle el color a los textView dentro de la lista
@@ -116,12 +118,16 @@ public class CertificadoActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 try {
                     JSONObject c = constancias.getJSONObject((position));//puede que position sea -1
+                    System.out.println(c.toString());
+                    JSONObject fud = c.getJSONObject("fechaUltimaDosis");
+                    String fechaUltimaDosis = fud.getString("dayOfMonth") + "/" + fud.getString("monthValue") + "/" + fud.getString("year");
                     Intent i= new Intent(CertificadoActivity.this, ConstanciaActivity.class);
                     i.putExtra("id", c.getString("idConstVac"));
                     i.putExtra("inmunidad",c.getString("periodoInmunidad"));
                     i.putExtra("dosisResibidas", c.getString("dosisRecibidas"));
-                    i.putExtra("ultimaDosis", c.getString("fechaUltimaDosis"));
+                    i.putExtra("ultimaDosis", fechaUltimaDosis);
                     i.putExtra("vacuna", c.getString("vacuna"));
+                    i.putExtra("enfermedad", c.getString("enfermedad"));
                     startActivity(i);
                 } catch (JSONException e) {
                     e.printStackTrace();

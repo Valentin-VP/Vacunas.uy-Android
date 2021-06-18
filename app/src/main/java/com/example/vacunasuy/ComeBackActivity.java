@@ -29,10 +29,11 @@ public class ComeBackActivity extends AppCompatActivity {
         sharedPref = getSharedPreferences("myPref", MODE_PRIVATE);
 
         Uri URIdata = getIntent().getData();
+        System.out.println(URIdata);
         if(URIdata != null ) {
             String uriString = URIdata.toString();
-            String url = uriString.replaceAll("localhost/", "10.0.2.2:8080/grupo15-services/callback"); //cambio el link para que se direccione a donde quiero
-
+            String url = uriString.replaceAll("https://grupo15-vacunasuy-testing.web.elasticloud.uy", "http://10.0.2.2:8080"); //cambio el link para que se direccione a donde quiero
+            System.out.println(url);
             //defino el cliente para hacer el http request
             OkHttpClient client = new OkHttpClient().newBuilder()
                     .followRedirects(false)
@@ -52,10 +53,9 @@ public class ComeBackActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(@NotNull Call call, @NotNull okhttp3.Response response) throws IOException { //si obtengo respuesta
                     String cookie = response.header("Set-Cookie");
-
+                    System.out.println(response.headers());
                     if (cookie.contains("x-access-token")) {//si el usuario esta registrado en la bd nos retorna un x-access-token
                         System.out.println("#########################################");
-                        System.out.println(cookie);
                         // guardar cookie en SharedPreferences
                         sharedPref.edit().putString("cookie", cookie).commit();
                         System.out.println("#########################################");

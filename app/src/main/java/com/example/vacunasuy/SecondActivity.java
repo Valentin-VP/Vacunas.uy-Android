@@ -17,14 +17,18 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.Objects;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 
 //import com.google.firebase.messaging.FirebaseMessaging;
 
@@ -124,18 +128,27 @@ public class SecondActivity extends AppCompatActivity {
 
                         // Log and toast
                         Log.d("TAG", token);
-                        //sendToken(token);
+                        sendToken(token);
                     }
                 });
 
     }
     private void sendToken(String token){ //envio el token al central
-        String url = "http://10.0.2.2:8080/grupo15-services/rest/ciudadano/mobiletoken";
+        String url = "http://10.0.2.2:8080/grupo15-services/rest/app/registrar";
         OkHttpClient client = new OkHttpClient();
+
+        //creo el jsonobject
+        JSONObject firebaseJson = new JSONObject();
+        try {
+            firebaseJson.put("mobileToken", token);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        RequestBody firebaseBody = RequestBody.create(firebaseJson.toString(), MediaType.parse("application/json"));
         //defino el request
         Request request = new Request.Builder()
                 .addHeader("Cookie", cookie)
-                .addHeader("firebaseToken", token)
+                .post(firebaseBody)
                 .url(url)
                 .build();
 
