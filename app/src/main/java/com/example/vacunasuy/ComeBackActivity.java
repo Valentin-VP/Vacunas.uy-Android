@@ -19,6 +19,7 @@ import okhttp3.Request;
 public class ComeBackActivity extends AppCompatActivity {
 
     SharedPreferences sharedPref;
+    String endpoint;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,14 +28,17 @@ public class ComeBackActivity extends AppCompatActivity {
 
         // get or create SharedPreferences
         sharedPref = getSharedPreferences("myPref", MODE_PRIVATE);
-
+        endpoint = sharedPref.getString("endpoint", "");
         Uri URIdata = getIntent().getData();
         System.out.println(URIdata);
+
         if(URIdata != null ) {
             String uriString = URIdata.toString();
-            String url = uriString.replaceAll("https://grupo15-vacunasuy-testing.web.elasticloud.uy", "http://10.0.2.2:8080"); //cambio el link para que se direccione a donde quiero
+            String url = uriString.replaceAll("https://grupo15-vacunasuy-testing.web.elasticloud.uy", endpoint); //cambio el link para que se direccione a donde quiero
             System.out.println(url);
+            //Este es el rest que se rompe!!!!!!!!!!!!!!!!!!!!!!!!!!
             //defino el cliente para hacer el http request
+
             OkHttpClient client = new OkHttpClient().newBuilder()
                     .followRedirects(false)
                     .build();

@@ -36,6 +36,7 @@
             android:screenOrientation="behind">
             <intent-filter>
                 <data
+                    android:path="/grupo15-services/callback"
                     android:host="grupo15-vacunasuy-testing.web.elasticloud.uy"
                     android:scheme="https" />
 

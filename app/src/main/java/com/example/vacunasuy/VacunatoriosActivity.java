@@ -3,6 +3,7 @@ package com.example.vacunasuy;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.Uri;
@@ -37,6 +38,8 @@ public class VacunatoriosActivity extends AppCompatActivity {
     private Location gps;
     FusedLocationProviderClient fusedLocationClient;
     TextView vac1, vac2, vac3;
+    SharedPreferences sharedPref;
+    String endpoint;
 
 
     @Override
@@ -47,6 +50,8 @@ public class VacunatoriosActivity extends AppCompatActivity {
         vac2 = findViewById(R.id.vac2);
         vac3 = findViewById(R.id.vac3);
 
+        sharedPref = getSharedPreferences("myPref", MODE_PRIVATE);
+        endpoint = sharedPref.getString("endpoint", "");
 
         //permisos de ubicacion
         if(ActivityCompat.checkSelfPermission(VacunatoriosActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
@@ -83,7 +88,7 @@ public class VacunatoriosActivity extends AppCompatActivity {
     public void getVacunatorios(){
         System.out.println("entro al getVacunatorios");
         //hago el pedido de los vacunatorios
-        String url = "http://10.0.2.2:8080/grupo15-services/rest/vacunatorios/listar";
+        String url = endpoint+"/grupo15-services/rest/vacunatorios/listar";
         RequestQueue rq = Volley.newRequestQueue(this);
         JsonArrayRequest or = new JsonArrayRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONArray>() {

@@ -8,6 +8,7 @@ import android.view.ViewParent;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.filters.LargeTest;
 import androidx.test.rule.ActivityTestRule;
+import androidx.test.rule.GrantPermissionRule;
 import androidx.test.runner.AndroidJUnit4;
 
 import org.hamcrest.Description;
@@ -20,19 +21,26 @@ import org.junit.runner.RunWith;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.is;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class LoginTest {
+public class VacunatoriosTestConDatos {
 
     @Rule
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
+    @Rule
+    public GrantPermissionRule mGrantPermissionRule =
+            GrantPermissionRule.grant(
+                    "android.permission.ACCESS_FINE_LOCATION");
+
     @Test
-    public void loginActivity() {
+    public void vacunatoriosTestConDatos() {
         ViewInteraction materialButton = onView(
                 allOf(withId(R.id.login), withText("Login"),
                         childAtPosition(
@@ -42,6 +50,26 @@ public class LoginTest {
                                 0),
                         isDisplayed()));
         materialButton.perform(click());
+
+        ViewInteraction cardView2 = onView(
+                allOf(withId(R.id.vacunatorio),
+                        childAtPosition(
+                                allOf(withId(R.id.linearLayout),
+                                        childAtPosition(
+                                                withClassName(is("androidx.constraintlayout.widget.ConstraintLayout")),
+                                                4)),
+                                1)));
+        cardView2.perform(click());
+
+        ViewInteraction materialTextView = onView(
+                allOf(withId(R.id.vac1), withText("Palacio legislativo"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                2),
+                        isDisplayed()));
+        materialTextView.perform(click());
     }
 
     private static Matcher<View> childAtPosition(

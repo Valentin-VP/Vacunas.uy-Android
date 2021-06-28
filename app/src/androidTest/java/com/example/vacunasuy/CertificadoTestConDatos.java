@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 
+import androidx.test.espresso.DataInteraction;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.filters.LargeTest;
 import androidx.test.rule.ActivityTestRule;
@@ -17,22 +18,28 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.Espresso.pressBack;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.anything;
+import static org.hamcrest.Matchers.is;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class LoginTest {
+public class CertificadoTestConDatos {
 
     @Rule
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
     @Test
-    public void loginActivity() {
+    public void vacunatoriosTestConDatos() {
         ViewInteraction materialButton = onView(
                 allOf(withId(R.id.login), withText("Login"),
                         childAtPosition(
@@ -42,6 +49,37 @@ public class LoginTest {
                                 0),
                         isDisplayed()));
         materialButton.perform(click());
+
+        ViewInteraction cardView = onView(
+                allOf(withId(R.id.certificado),
+                        childAtPosition(
+                                allOf(withId(R.id.linearLayout),
+                                        childAtPosition(
+                                                withClassName(is("androidx.constraintlayout.widget.ConstraintLayout")),
+                                                4)),
+                                0)));
+        cardView.perform(scrollTo(), click());
+
+        DataInteraction materialTextView = onData(anything())
+                .inAdapterView(allOf(withId(R.id.listaConstancias),
+                        childAtPosition(
+                                withClassName(is("androidx.constraintlayout.widget.ConstraintLayout")),
+                                1)))
+                .atPosition(0);
+        materialTextView.perform(click());
+
+        pressBack();
+
+        pressBack();
+
+        ViewInteraction appCompatImageButton = onView(
+                childAtPosition(
+                        allOf(withId(R.id.navbar),
+                                childAtPosition(
+                                        withClassName(is("androidx.constraintlayout.widget.ConstraintLayout")),
+                                        3)),
+                        0));
+        appCompatImageButton.perform(scrollTo(), click());
     }
 
     private static Matcher<View> childAtPosition(

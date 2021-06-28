@@ -18,21 +18,24 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.Espresso.pressBack;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.is;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class LoginTest {
+public class CertificadosTestSinDatos {
 
     @Rule
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
     @Test
-    public void loginActivity() {
+    public void certificadosTestSinDatos() {
         ViewInteraction materialButton = onView(
                 allOf(withId(R.id.login), withText("Login"),
                         childAtPosition(
@@ -42,6 +45,27 @@ public class LoginTest {
                                 0),
                         isDisplayed()));
         materialButton.perform(click());
+
+        ViewInteraction cardView = onView(
+                allOf(withId(R.id.certificado),
+                        childAtPosition(
+                                allOf(withId(R.id.linearLayout),
+                                        childAtPosition(
+                                                withClassName(is("androidx.constraintlayout.widget.ConstraintLayout")),
+                                                4)),
+                                0)));
+        cardView.perform(click());
+
+        pressBack();
+
+        ViewInteraction appCompatImageButton = onView(
+                childAtPosition(
+                        allOf(withId(R.id.navbar),
+                                childAtPosition(
+                                        withClassName(is("androidx.constraintlayout.widget.ConstraintLayout")),
+                                        3)),
+                        0));
+        appCompatImageButton.perform(click());
     }
 
     private static Matcher<View> childAtPosition(

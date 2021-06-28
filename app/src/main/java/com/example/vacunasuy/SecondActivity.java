@@ -41,11 +41,15 @@ public class SecondActivity extends AppCompatActivity {
     private CardView certificado, vacunatorio;
     Toolbar toolbar;
     SharedPreferences sharedPref;
+    String endpoint;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_second);
+
+        sharedPref = getSharedPreferences("myPref", MODE_PRIVATE);
+        endpoint = sharedPref.getString("endpoint", "");
 
         nombre = (TextView) findViewById(R.id.nombre);
         certificado = findViewById(R.id.certificado);
@@ -89,7 +93,7 @@ public class SecondActivity extends AppCompatActivity {
     }
 
     public void getNombre(){
-        String url = "http://10.0.2.2:8080/grupo15-services/rest/mobile/id";
+        String url = endpoint+"/grupo15-services/rest/mobile/id";
         OkHttpClient client = new OkHttpClient();
         //defino el request
         Request request = new Request.Builder()
@@ -134,7 +138,7 @@ public class SecondActivity extends AppCompatActivity {
 
     }
     private void sendToken(String token){ //envio el token al central
-        String url = "http://10.0.2.2:8080/grupo15-services/rest/app/registrar";
+        String url = endpoint+"/grupo15-services/rest/app/registrar";
         OkHttpClient client = new OkHttpClient();
 
         //creo el jsonobject

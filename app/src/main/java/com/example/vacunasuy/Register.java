@@ -2,6 +2,7 @@ package com.example.vacunasuy;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -31,11 +32,16 @@ import okhttp3.RequestBody;
 public class Register extends AppCompatActivity implements DatePickerDialog.OnDateSetListener{
 
     private TextView dateText;
+    SharedPreferences sharedPref;
+    String endpoint;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+
+        sharedPref = getSharedPreferences("myPref", MODE_PRIVATE);
+        endpoint = sharedPref.getString("endpoint", "");
 
         TextView registrarse = (TextView) findViewById(R.id.registrarse);
         this.dateText = (TextView) findViewById(R.id.date);
@@ -92,7 +98,7 @@ public class Register extends AppCompatActivity implements DatePickerDialog.OnDa
                         e.printStackTrace();
                     }
 
-                    String url = "http://10.0.2.2:8080/grupo15-services/rest/registro/ciudadano";
+                    String url = endpoint+"/grupo15-services/rest/registro/ciudadano";
                     final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
                     //creo el httprequest
                     OkHttpClient client = new OkHttpClient();

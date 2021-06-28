@@ -35,6 +35,7 @@ public class CertificadoActivity extends AppCompatActivity {
     private String cookie;
     JSONArray constancias = new JSONArray();
     SharedPreferences sharedPref;
+    String endpoint;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +44,7 @@ public class CertificadoActivity extends AppCompatActivity {
         //obtengo la cookie
         sharedPref = getSharedPreferences("myPref", MODE_PRIVATE);//obtengo el sharedPreference
         cookie = sharedPref.getString("cookie", null);//obtengo la cookie, si no existe retorna null
+        endpoint = sharedPref.getString("endpoint", "");
         getCertificado();
 
     }
@@ -50,7 +52,7 @@ public class CertificadoActivity extends AppCompatActivity {
     public void getCertificado(){
         System.out.println("entro al getVacunatorios");
         //hago el pedido de los vacunatorios
-        String url = "http://10.0.2.2:8080/grupo15-services/rest/vacunaciones/certificado";
+        String url = endpoint+"/grupo15-services/rest/vacunaciones/certificado";
         RequestQueue rq = Volley.newRequestQueue(this);
         JsonObjectRequest or = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {

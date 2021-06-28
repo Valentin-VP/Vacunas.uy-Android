@@ -5,21 +5,26 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 
-import androidx.test.espresso.Espresso;
 import androidx.test.espresso.ViewInteraction;
-import androidx.test.espresso.action.ViewActions;
-import androidx.test.espresso.matcher.ViewMatchers;
-import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
 import androidx.test.rule.ActivityTestRule;
+import androidx.test.runner.AndroidJUnit4;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
-import org.hamcrest.Matchers;
 import org.hamcrest.TypeSafeMatcher;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.is;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
@@ -30,24 +35,24 @@ public class LogoutTest {
 
     @Test
     public void logoutTest() {
-        ViewInteraction materialButton = Espresso.onView(
-                Matchers.allOf(ViewMatchers.withId(R.id.login), ViewMatchers.withText("Login"),
+        ViewInteraction materialButton = onView(
+                allOf(withId(R.id.login), withText("Login"),
                         childAtPosition(
                                 childAtPosition(
-                                        ViewMatchers.withId(android.R.id.content),
+                                        withId(android.R.id.content),
                                         0),
                                 0),
-                        ViewMatchers.isDisplayed()));
-        materialButton.perform(ViewActions.click());
+                        isDisplayed()));
+        materialButton.perform(click());
 
-        ViewInteraction appCompatImageButton = Espresso.onView(
+        ViewInteraction appCompatImageButton = onView(
                 childAtPosition(
-                        Matchers.allOf(ViewMatchers.withId(R.id.navbar),
+                        allOf(withId(R.id.navbar),
                                 childAtPosition(
-                                        ViewMatchers.withClassName(Matchers.is("androidx.constraintlayout.widget.ConstraintLayout")),
+                                        withClassName(is("androidx.constraintlayout.widget.ConstraintLayout")),
                                         3)),
                         0));
-        appCompatImageButton.perform(ViewActions.scrollTo(), ViewActions.click());
+        appCompatImageButton.perform(click());
     }
 
     private static Matcher<View> childAtPosition(

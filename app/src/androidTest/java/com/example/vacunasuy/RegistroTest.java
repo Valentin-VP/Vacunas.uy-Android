@@ -6,21 +6,32 @@ import android.view.ViewGroup;
 import android.view.ViewParent;
 
 import androidx.test.espresso.DataInteraction;
-import androidx.test.espresso.Espresso;
 import androidx.test.espresso.ViewInteraction;
-import androidx.test.espresso.action.ViewActions;
-import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.filters.LargeTest;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.AndroidJUnit4;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
-import org.hamcrest.Matchers;
 import org.hamcrest.TypeSafeMatcher;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import static androidx.test.espresso.Espresso.onData;
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static androidx.test.espresso.action.ViewActions.replaceText;
+import static androidx.test.espresso.action.ViewActions.scrollTo;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
+import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.anything;
+import static org.hamcrest.Matchers.is;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
@@ -31,187 +42,188 @@ public class RegistroTest {
 
     @Test
     public void registroTest() {
-        ViewInteraction materialButton = Espresso.onView(
-                Matchers.allOf(ViewMatchers.withId(R.id.login), ViewMatchers.withText("Login"),
+        ViewInteraction materialButton = onView(
+                allOf(withId(R.id.login), withText("Login"),
                         childAtPosition(
                                 childAtPosition(
-                                        ViewMatchers.withId(android.R.id.content),
+                                        withId(android.R.id.content),
                                         0),
                                 0),
-                        ViewMatchers.isDisplayed()));
-        materialButton.perform(ViewActions.click());
+                        isDisplayed()));
+        materialButton.perform(click());
 
-        ViewInteraction materialTextView = Espresso.onView(
-                Matchers.allOf(ViewMatchers.withId(R.id.registrarse), ViewMatchers.withText("Registrarse"),
+        ViewInteraction appCompatEditText = onView(
+                allOf(withId(R.id.cedula),
                         childAtPosition(
-                                childAtPosition(
-                                        ViewMatchers.withId(R.id.linearLayout2),
-                                        10),
-                                0)));
-        materialTextView.perform(ViewActions.scrollTo(), ViewActions.click());
-
-        ViewInteraction appCompatEditText = Espresso.onView(
-                Matchers.allOf(ViewMatchers.withId(R.id.cedula),
-                        childAtPosition(
-                                Matchers.allOf(ViewMatchers.withId(R.id.linearLayout2),
+                                allOf(withId(R.id.linearLayout2),
                                         childAtPosition(
-                                                ViewMatchers.withClassName(Matchers.is("androidx.constraintlayout.widget.ConstraintLayout")),
+                                                withClassName(is("androidx.constraintlayout.widget.ConstraintLayout")),
                                                 1)),
                                 0)));
-        appCompatEditText.perform(ViewActions.scrollTo(), ViewActions.replaceText("49457795"), ViewActions.closeSoftKeyboard());
+        appCompatEditText.perform(replaceText("49457795"), closeSoftKeyboard());
 
-        ViewInteraction appCompatEditText2 = Espresso.onView(
-                Matchers.allOf(ViewMatchers.withId(R.id.nombre),
+        ViewInteraction appCompatEditText2 = onView(
+                allOf(withId(R.id.nombre),
                         childAtPosition(
-                                Matchers.allOf(ViewMatchers.withId(R.id.linearLayout2),
+                                allOf(withId(R.id.linearLayout2),
                                         childAtPosition(
-                                                ViewMatchers.withClassName(Matchers.is("androidx.constraintlayout.widget.ConstraintLayout")),
+                                                withClassName(is("androidx.constraintlayout.widget.ConstraintLayout")),
                                                 1)),
                                 1)));
-        appCompatEditText2.perform(ViewActions.scrollTo(), ViewActions.replaceText("Valentin"), ViewActions.closeSoftKeyboard());
+        appCompatEditText2.perform(scrollTo(), replaceText("Valentin"), closeSoftKeyboard());
 
-        ViewInteraction appCompatEditText3 = Espresso.onView(
-                Matchers.allOf(ViewMatchers.withId(R.id.apellido),
+        ViewInteraction appCompatEditText3 = onView(
+                allOf(withId(R.id.apellido),
                         childAtPosition(
-                                Matchers.allOf(ViewMatchers.withId(R.id.linearLayout2),
+                                allOf(withId(R.id.linearLayout2),
                                         childAtPosition(
-                                                ViewMatchers.withClassName(Matchers.is("androidx.constraintlayout.widget.ConstraintLayout")),
+                                                withClassName(is("androidx.constraintlayout.widget.ConstraintLayout")),
                                                 1)),
                                 2)));
-        appCompatEditText3.perform(ViewActions.scrollTo(), ViewActions.replaceText("Vasconcellos"), ViewActions.closeSoftKeyboard());
+        appCompatEditText3.perform(scrollTo(), replaceText("Vasconcellos"), closeSoftKeyboard());
 
-        ViewInteraction appCompatEditText4 = Espresso.onView(
-                Matchers.allOf(ViewMatchers.withId(R.id.departamento),
+        ViewInteraction appCompatEditText4 = onView(
+                allOf(withId(R.id.departamento),
                         childAtPosition(
-                                Matchers.allOf(ViewMatchers.withId(R.id.linearLayout2),
+                                allOf(withId(R.id.linearLayout2),
                                         childAtPosition(
-                                                ViewMatchers.withClassName(Matchers.is("androidx.constraintlayout.widget.ConstraintLayout")),
+                                                withClassName(is("androidx.constraintlayout.widget.ConstraintLayout")),
                                                 1)),
                                 3)));
-        appCompatEditText4.perform(ViewActions.scrollTo(), ViewActions.replaceText("Montevideo"), ViewActions.closeSoftKeyboard());
+        appCompatEditText4.perform(scrollTo(), replaceText("Montevideo"), closeSoftKeyboard());
 
-        ViewInteraction appCompatEditText5 = Espresso.onView(
-                Matchers.allOf(ViewMatchers.withId(R.id.barrio),
+        ViewInteraction appCompatEditText5 = onView(
+                allOf(withId(R.id.barrio),
                         childAtPosition(
-                                Matchers.allOf(ViewMatchers.withId(R.id.linearLayout2),
+                                allOf(withId(R.id.linearLayout2),
                                         childAtPosition(
-                                                ViewMatchers.withClassName(Matchers.is("androidx.constraintlayout.widget.ConstraintLayout")),
+                                                withClassName(is("androidx.constraintlayout.widget.ConstraintLayout")),
                                                 1)),
                                 4)));
-        appCompatEditText5.perform(ViewActions.scrollTo(), ViewActions.replaceText("Aguada"), ViewActions.closeSoftKeyboard());
+        appCompatEditText5.perform(scrollTo(), replaceText("Barrio"), closeSoftKeyboard());
 
-        ViewInteraction appCompatEditText6 = Espresso.onView(
-                Matchers.allOf(ViewMatchers.withId(R.id.direccion),
+        ViewInteraction appCompatEditText6 = onView(
+                allOf(withId(R.id.direccion),
                         childAtPosition(
-                                Matchers.allOf(ViewMatchers.withId(R.id.linearLayout2),
+                                allOf(withId(R.id.linearLayout2),
                                         childAtPosition(
-                                                ViewMatchers.withClassName(Matchers.is("androidx.constraintlayout.widget.ConstraintLayout")),
+                                                withClassName(is("androidx.constraintlayout.widget.ConstraintLayout")),
                                                 1)),
                                 5)));
-        appCompatEditText6.perform(ViewActions.scrollTo(), ViewActions.replaceText("Calle 1"), ViewActions.closeSoftKeyboard());
+        appCompatEditText6.perform(scrollTo(), replaceText("Direccion"), closeSoftKeyboard());
 
-        ViewInteraction appCompatEditText7 = Espresso.onView(
-                Matchers.allOf(ViewMatchers.withId(R.id.email),
+        ViewInteraction appCompatEditText7 = onView(
+                allOf(withId(R.id.email),
                         childAtPosition(
-                                Matchers.allOf(ViewMatchers.withId(R.id.linearLayout2),
+                                allOf(withId(R.id.linearLayout2),
                                         childAtPosition(
-                                                ViewMatchers.withClassName(Matchers.is("androidx.constraintlayout.widget.ConstraintLayout")),
+                                                withClassName(is("androidx.constraintlayout.widget.ConstraintLayout")),
                                                 1)),
                                 6)));
-        appCompatEditText7.perform(ViewActions.scrollTo(), ViewActions.replaceText("valevp2010@gmail.com"), ViewActions.closeSoftKeyboard());
+        appCompatEditText7.perform(scrollTo(), click());
 
-        ViewInteraction materialTextView2 = Espresso.onView(
-                Matchers.allOf(ViewMatchers.withId(R.id.date), ViewMatchers.withText("Fec. nacimiento"),
+        ViewInteraction appCompatEditText8 = onView(
+                allOf(withId(R.id.email),
                         childAtPosition(
-                                Matchers.allOf(ViewMatchers.withId(R.id.linearLayout2),
+                                allOf(withId(R.id.linearLayout2),
                                         childAtPosition(
-                                                ViewMatchers.withClassName(Matchers.is("androidx.constraintlayout.widget.ConstraintLayout")),
+                                                withClassName(is("androidx.constraintlayout.widget.ConstraintLayout")),
+                                                1)),
+                                6)));
+        appCompatEditText8.perform(scrollTo(), replaceText("valevp2010@gmail.com"), closeSoftKeyboard());
+
+        ViewInteraction materialTextView = onView(
+                allOf(withId(R.id.date), withText("Fec. nacimiento"),
+                        childAtPosition(
+                                allOf(withId(R.id.linearLayout2),
+                                        childAtPosition(
+                                                withClassName(is("androidx.constraintlayout.widget.ConstraintLayout")),
                                                 1)),
                                 7)));
-        materialTextView2.perform(ViewActions.scrollTo(), ViewActions.click());
+        materialTextView.perform(scrollTo(), click());
 
-        ViewInteraction materialTextView3 = Espresso.onView(
-                Matchers.allOf(ViewMatchers.withClassName(Matchers.is("com.google.android.material.textview.MaterialTextView")), ViewMatchers.withText("2021"),
+        ViewInteraction materialTextView2 = onView(
+                allOf(withClassName(is("com.google.android.material.textview.MaterialTextView")), withText("2021"),
                         childAtPosition(
                                 childAtPosition(
-                                        ViewMatchers.withClassName(Matchers.is("android.widget.LinearLayout")),
+                                        withClassName(is("android.widget.LinearLayout")),
                                         0),
                                 0),
-                        ViewMatchers.isDisplayed()));
-        materialTextView3.perform(ViewActions.click());
+                        isDisplayed()));
+        materialTextView2.perform(click());
 
-        DataInteraction materialTextView4 = Espresso.onData(Matchers.anything())
-                .inAdapterView(Matchers.allOf(ViewMatchers.withClassName(Matchers.is("android.widget.YearPickerView")),
+        DataInteraction materialTextView3 = onData(anything())
+                .inAdapterView(allOf(withClassName(is("android.widget.YearPickerView")),
                         childAtPosition(
-                                ViewMatchers.withClassName(Matchers.is("com.android.internal.widget.DialogViewAnimator")),
+                                withClassName(is("com.android.internal.widget.DialogViewAnimator")),
                                 1)))
                 .atPosition(100);
-        materialTextView4.perform(ViewActions.scrollTo(), ViewActions.click());
+        materialTextView3.perform(scrollTo(), click());
 
-        ViewInteraction appCompatImageButton = Espresso.onView(
-                Matchers.allOf(ViewMatchers.withClassName(Matchers.is("androidx.appcompat.widget.AppCompatImageButton")), ViewMatchers.withContentDescription("Previous month"),
+        ViewInteraction appCompatImageButton = onView(
+                allOf(withClassName(is("androidx.appcompat.widget.AppCompatImageButton")), withContentDescription("Previous month"),
                         childAtPosition(
-                                Matchers.allOf(ViewMatchers.withClassName(Matchers.is("android.widget.DayPickerView")),
+                                allOf(withClassName(is("android.widget.DayPickerView")),
                                         childAtPosition(
-                                                ViewMatchers.withClassName(Matchers.is("com.android.internal.widget.DialogViewAnimator")),
+                                                withClassName(is("com.android.internal.widget.DialogViewAnimator")),
                                                 0)),
                                 1)));
-        appCompatImageButton.perform(ViewActions.scrollTo(), ViewActions.click());
+        appCompatImageButton.perform(scrollTo(), click());
 
-        ViewInteraction appCompatImageButton2 = Espresso.onView(
-                Matchers.allOf(ViewMatchers.withClassName(Matchers.is("androidx.appcompat.widget.AppCompatImageButton")), ViewMatchers.withContentDescription("Previous month"),
+        ViewInteraction appCompatImageButton2 = onView(
+                allOf(withClassName(is("androidx.appcompat.widget.AppCompatImageButton")), withContentDescription("Previous month"),
                         childAtPosition(
-                                Matchers.allOf(ViewMatchers.withClassName(Matchers.is("android.widget.DayPickerView")),
+                                allOf(withClassName(is("android.widget.DayPickerView")),
                                         childAtPosition(
-                                                ViewMatchers.withClassName(Matchers.is("com.android.internal.widget.DialogViewAnimator")),
+                                                withClassName(is("com.android.internal.widget.DialogViewAnimator")),
                                                 0)),
                                 1)));
-        appCompatImageButton2.perform(ViewActions.scrollTo(), ViewActions.click());
+        appCompatImageButton2.perform(scrollTo(), click());
 
-        ViewInteraction appCompatImageButton3 = Espresso.onView(
-                Matchers.allOf(ViewMatchers.withClassName(Matchers.is("androidx.appcompat.widget.AppCompatImageButton")), ViewMatchers.withContentDescription("Previous month"),
+        ViewInteraction appCompatImageButton3 = onView(
+                allOf(withClassName(is("androidx.appcompat.widget.AppCompatImageButton")), withContentDescription("Previous month"),
                         childAtPosition(
-                                Matchers.allOf(ViewMatchers.withClassName(Matchers.is("android.widget.DayPickerView")),
+                                allOf(withClassName(is("android.widget.DayPickerView")),
                                         childAtPosition(
-                                                ViewMatchers.withClassName(Matchers.is("com.android.internal.widget.DialogViewAnimator")),
+                                                withClassName(is("com.android.internal.widget.DialogViewAnimator")),
                                                 0)),
                                 1)));
-        appCompatImageButton3.perform(ViewActions.scrollTo(), ViewActions.click());
+        appCompatImageButton3.perform(scrollTo(), click());
 
-        ViewInteraction materialButton2 = Espresso.onView(
-                Matchers.allOf(ViewMatchers.withId(android.R.id.button1), ViewMatchers.withText("OK"),
+        ViewInteraction materialButton2 = onView(
+                allOf(withId(android.R.id.button1), withText("OK"),
                         childAtPosition(
                                 childAtPosition(
-                                        ViewMatchers.withClassName(Matchers.is("android.widget.ScrollView")),
+                                        withClassName(is("android.widget.ScrollView")),
                                         0),
                                 3)));
-        materialButton2.perform(ViewActions.scrollTo(), ViewActions.click());
+        materialButton2.perform(scrollTo(), click());
 
-        ViewInteraction appCompatSpinner = Espresso.onView(
-                Matchers.allOf(ViewMatchers.withId(R.id.sexo),
+        ViewInteraction appCompatSpinner = onView(
+                allOf(withId(R.id.sexo),
                         childAtPosition(
-                                Matchers.allOf(ViewMatchers.withId(R.id.linearLayout2),
+                                allOf(withId(R.id.linearLayout2),
                                         childAtPosition(
-                                                ViewMatchers.withClassName(Matchers.is("androidx.constraintlayout.widget.ConstraintLayout")),
+                                                withClassName(is("androidx.constraintlayout.widget.ConstraintLayout")),
                                                 1)),
                                 8)));
-        appCompatSpinner.perform(ViewActions.scrollTo(), ViewActions.click());
+        appCompatSpinner.perform(scrollTo(), click());
 
-        DataInteraction appCompatCheckedTextView = Espresso.onData(Matchers.anything())
+        DataInteraction appCompatCheckedTextView = onData(anything())
                 .inAdapterView(childAtPosition(
-                        ViewMatchers.withClassName(Matchers.is("android.widget.PopupWindow$PopupBackgroundView")),
+                        withClassName(is("android.widget.PopupWindow$PopupBackgroundView")),
                         0))
                 .atPosition(0);
-        appCompatCheckedTextView.perform(ViewActions.click());
+        appCompatCheckedTextView.perform(click());
 
-        ViewInteraction materialTextView5 = Espresso.onView(
-                Matchers.allOf(ViewMatchers.withId(R.id.registrarse), ViewMatchers.withText("Registrarse"),
+        ViewInteraction materialTextView4 = onView(
+                allOf(withId(R.id.registrarse), withText("Registrarse"),
                         childAtPosition(
                                 childAtPosition(
-                                        ViewMatchers.withId(R.id.linearLayout2),
+                                        withId(R.id.linearLayout2),
                                         10),
                                 0)));
-        materialTextView5.perform(ViewActions.scrollTo(), ViewActions.click());
+        materialTextView4.perform(scrollTo(), click());
     }
 
     private static Matcher<View> childAtPosition(

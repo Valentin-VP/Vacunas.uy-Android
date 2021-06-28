@@ -18,12 +18,14 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity {
 
     private TextView mTextViewResult;
     SharedPreferences sharedPref;
     boolean loggeado = false;
+    String endpoint;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,12 +33,19 @@ public class MainActivity extends AppCompatActivity {
 
         sharedPref = getSharedPreferences("myPref", MODE_PRIVATE);//obtengo el sharedPreference
         String cookie = sharedPref.getString("cookie", null);//obtengo la cookie, si no existe retorna null
+        sharedPref.edit().putString("endpoint", "https://grupo15-vacunasuy-testing.web.elasticloud.uy").commit(); //seteo el endpoint a donde quiero que vaya
+        //https://grupo15-vacunasuy-testing.web.elasticloud.uy
+        //http://10.0.2.2:8080
+        endpoint = sharedPref.getString("endpoint", "");
         System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
         System.out.println(cookie);
         System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
 
         if(cookie != null) {
-            String url = "http://10.0.2.2:8080/grupo15-services/rest/usuario/checkToken";
+            String url = endpoint +"/grupo15-services/rest/usuario/checkToken";
+            System.out.println("#####################");
+            System.out.println(url);
+            System.out.println("#####################");
             OkHttpClient client = new OkHttpClient();
             //defino el request
             Request request = new Request.Builder()
@@ -52,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 @Override
-                public void onResponse(@NotNull Call call, @NotNull okhttp3.Response response) throws IOException { //si obtengo respuesta
+                public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException { //si obtengo respuesta
                     System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
                     System.out.println(response.code());
                     if(response.code() == 200)
@@ -76,7 +85,10 @@ public class MainActivity extends AppCompatActivity {
             loginButton.setOnClickListener(new View.OnClickListener() { //seteo el boton
                 @Override
                 public void onClick(View v) {
-                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://10.0.2.2:8080/grupo15-services/login?tipoUsuario=ciudadano"));
+                    System.out.println("#####################");
+                    System.out.println(endpoint+"/grupo15-services/login?tipoUsuario=ciudadano");
+                    System.out.println("#####################");
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(endpoint+"/grupo15-services/login?tipoUsuario=ciudadano"));
                     startActivity(browserIntent);
                     System.out.println("funciona");
                 }
