@@ -15,7 +15,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.VacunasUy"
-        android:usesCleartextTraffic="true">
+        android:usesCleartextTraffic="true"
+        android:networkSecurityConfig="@xml/network_security_config">
+<!--        android:usesCleartextTraffic="true"-->
+<!--        android:networkSecurityConfig="@xml/network_security_config"-->
         <activity android:name=".VacunatoriosActivity"></activity>
         <activity android:name=".SecondActivity" />
         <activity android:name=".ConstanciaActivity" />
@@ -36,9 +39,8 @@
             android:screenOrientation="behind">
             <intent-filter>
                 <data
-                    android:path="/grupo15-services/callback"
-                    android:host="grupo15-vacunasuy-testing.web.elasticloud.uy"
-                    android:scheme="https" />
+                    android:host="localhost"
+                    android:scheme="http" />
 
                 <action android:name="android.intent.action.VIEW" />
 

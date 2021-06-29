@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -34,7 +35,7 @@ public class ComeBackActivity extends AppCompatActivity {
 
         if(URIdata != null ) {
             String uriString = URIdata.toString();
-            String url = uriString.replaceAll("https://grupo15-vacunasuy-testing.web.elasticloud.uy", endpoint); //cambio el link para que se direccione a donde quiero
+            String url = uriString.replaceAll("http://localhost/", endpoint+"/grupo15-services/callback"); //cambio el link para que se direccione a donde quiero
             System.out.println(url);
             //Este es el rest que se rompe!!!!!!!!!!!!!!!!!!!!!!!!!!
             //defino el cliente para hacer el http request
@@ -56,14 +57,18 @@ public class ComeBackActivity extends AppCompatActivity {
 
                 @Override
                 public void onResponse(@NotNull Call call, @NotNull okhttp3.Response response) throws IOException { //si obtengo respuesta
-                    String cookie = response.header("Set-Cookie");
+                    List<String> cookie = response.headers("Set-Cookie");
                     System.out.println(response.headers());
-                    if (cookie.contains("x-access-token")) {//si el usuario esta registrado en la bd nos retorna un x-access-token
+                    System.out.println(response.headers("Set-Cookie"));
+                    System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+                    System.out.println(response.code());
+                    System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+                    if (cookie.get(1).contains("x-access-token")) {//si el usuario esta registrado en la bd nos retorna un x-access-token
                         System.out.println("#########################################");
                         // guardar cookie en SharedPreferences
-                        sharedPref.edit().putString("cookie", cookie).commit();
+                        sharedPref.edit().putString("cookie", cookie.get(1)).commit();
                         System.out.println("#########################################");
-                        goMenu(cookie);
+                        goMenu(cookie.get(1));
                         //getNombre();
                     } else { //si el usuario no esta registrado en la bd no retorna el x-access-token y lo mando a registrarse
                         Intent main = new Intent(ComeBackActivity.this, Register.class);

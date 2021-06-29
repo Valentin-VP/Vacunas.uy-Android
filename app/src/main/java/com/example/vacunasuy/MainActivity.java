@@ -57,7 +57,8 @@ public class MainActivity extends AppCompatActivity {
             client.newCall(request).enqueue(new Callback() {
                 @Override
                 public void onFailure(@NotNull Call call, @NotNull IOException e) { //si falla
-                    e.printStackTrace();
+                    System.out.println("Error en la conexion");
+                    System.out.println(e.getMessage());
                 }
 
                 @Override
