@@ -16,6 +16,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -31,6 +32,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class VacunatoriosActivity extends AppCompatActivity {
 
@@ -40,6 +43,7 @@ public class VacunatoriosActivity extends AppCompatActivity {
     TextView vac1, vac2, vac3;
     SharedPreferences sharedPref;
     String endpoint;
+    String cookie;
 
 
     @Override
@@ -51,17 +55,18 @@ public class VacunatoriosActivity extends AppCompatActivity {
         vac3 = findViewById(R.id.vac3);
 
         sharedPref = getSharedPreferences("myPref", MODE_PRIVATE);
+        cookie = sharedPref.getString("cookie", null);//obtengo la cookie, si no existe retorna null
         endpoint = sharedPref.getString("endpoint", "");
 
         //permisos de ubicacion
-        if(ActivityCompat.checkSelfPermission(VacunatoriosActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+        if (ActivityCompat.checkSelfPermission(VacunatoriosActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             //Cuando tenemos el permiso
             fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
             getLocation();
             //onclick del primero
 
-        }else{
-            ActivityCompat.requestPermissions(VacunatoriosActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},44);
+        } else {
+            ActivityCompat.requestPermissions(VacunatoriosActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 44);
             finish();
         }
 
@@ -69,7 +74,7 @@ public class VacunatoriosActivity extends AppCompatActivity {
     }
 
     @SuppressLint("MissingPermission")
-    public void getLocation(){
+    public void getLocation() {
         fusedLocationClient.getLastLocation()
                 .addOnSuccessListener(this, new OnSuccessListener<Location>() {
                     @Override
@@ -85,16 +90,16 @@ public class VacunatoriosActivity extends AppCompatActivity {
                 });
     }
 
-    public void getVacunatorios(){
+    public void getVacunatorios() {
         System.out.println("entro al getVacunatorios");
         //hago el pedido de los vacunatorios
-        String url = endpoint+"/grupo15-services/rest/vacunatorios/listar";
+        String url = endpoint + "/grupo15-services/rest/vacunatorios/listar";
         RequestQueue rq = Volley.newRequestQueue(this);
         JsonArrayRequest or = new JsonArrayRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        for(int i=0; i<response.length(); i++){
+                        for (int i = 0; i < response.length(); i++) {
                             try {
                                 vacunatorios.add(response.getJSONObject(i));
                             } catch (JSONException e) {
@@ -108,14 +113,51 @@ public class VacunatoriosActivity extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.e("Response: ", error.toString());
-                        Toast.makeText(VacunatoriosActivity.this,"Todavia no se asignaron los vacunatorios", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(VacunatoriosActivity.this, "Todavia no se asignaron los vacunatorios", Toast.LENGTH_SHORT).show();
                     }
-                }
-        );
+                }) { //esta es la parte que agrega el header al request
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Cookie", cookie);
+                return params;
+            }
+        };
         rq.add(or);
+//        OkHttpClient client = new OkHttpClient();
+//        System.out.println(cookie);
+//        Request request = new Request.Builder()
+//                .addHeader("Cookie", cookie)
+//                .url(url)
+//                .build();
+//
+//        client.newCall(request).enqueue(new Callback() {
+//            @Override
+//            public void onFailure(@NotNull Call call, @NotNull IOException e) { //si falla
+//                Log.e("Response: ", e.toString());
+//                Toast.makeText(VacunatoriosActivity.this,"Todavia no se asignaron los vacunatorios", Toast.LENGTH_SHORT).show();
+//            }
+//
+//            @Override
+//            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException { //si obtengo respuesta
+//                try {
+//                    System.out.println("##################################");
+//                    System.out.println(response.code());
+//                    System.out.println("##################################");
+//                    JSONArray respuesta = new JSONArray(response.body());
+//                    System.out.println(respuesta);
+//                    for(int i=0; i<respuesta.length(); i++) {
+//                        vacunatorios.add(respuesta.getJSONObject(i));
+//                    }
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//                continuaFlujo();
+//            }
+//        });
     }
 
-    public void continuaFlujo(){
+    public void continuaFlujo() {
         System.out.println("entro al continuarFlujo");
         System.out.println(gps.getLatitude());
         System.out.println(vacunatorios.size());
@@ -144,7 +186,7 @@ public class VacunatoriosActivity extends AppCompatActivity {
                 }
             });
             //seteo el onclick listener de vac2
-            if(vacunatorios.size() >= 2) {
+            if (vacunatorios.size() >= 2) {
                 vac2.setText(vacunatorios.get(1).getString("nombre"));
                 vac2.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -161,7 +203,7 @@ public class VacunatoriosActivity extends AppCompatActivity {
                     }
                 });
                 //seteo el onclick listener de vac3
-                if(vacunatorios.size() >= 3){
+                if (vacunatorios.size() >= 3) {
                     vac3.setText(vacunatorios.get(2).getString("nombre"));
                     vac3.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -193,11 +235,11 @@ public class VacunatoriosActivity extends AppCompatActivity {
             sorted = true;
             for (int i = 0; i < v.size() - 1; i++) {
                 double d1 = getDistancia(Double.parseDouble(v.get(i).getString("latitud")), Double.parseDouble(v.get(i).getString("longitud")));
-                double d2 = getDistancia(Double.parseDouble(v.get(i+1).getString("latitud")), Double.parseDouble(v.get(i+1).getString("longitud")));
+                double d2 = getDistancia(Double.parseDouble(v.get(i + 1).getString("latitud")), Double.parseDouble(v.get(i + 1).getString("longitud")));
                 if (d1 > d2) {
                     temp = v.get(i);
-                    v.set(i, v.get(i+1));
-                    v.set(i+1, temp);
+                    v.set(i, v.get(i + 1));
+                    v.set(i + 1, temp);
                     sorted = false;
                 }
 //                if (v[i] > v[i+1]) {
